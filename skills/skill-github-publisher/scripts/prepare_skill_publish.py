@@ -94,6 +94,26 @@ def iter_local_skills(root: Path) -> list[SkillMeta]:
     return skills
 
 
+def load_publish_manifest(path: Path) -> set[str]:
+    if not path.exists():
+        raise ValueError(f"Missing publish manifest: {path}")
+    data = json.loads(read_text(path))
+    raw_skills = data.get("skills")
+    if not isinstance(raw_skills, list):
+        raise ValueError(f"publish manifest must contain a skills list: {path}")
+    names: set[str] = set()
+    for item in raw_skills:
+        if isinstance(item, str):
+            names.add(item)
+        elif isinstance(item, dict) and isinstance(item.get("name"), str):
+            names.add(item["name"])
+        else:
+            raise ValueError(f"invalid skill entry in publish manifest: {item!r}")
+    if not names:
+        raise ValueError(f"publish manifest contains no skills: {path}")
+    return names
+
+
 def copy_skill(skill: SkillMeta, repo_dir: Path) -> Path:
     dest = repo_dir / "skills" / skill.name
     if dest.exists():
@@ -211,17 +231,27 @@ def main() -> int:
     parser.add_argument("--skill-dir", type=Path, help="Single local skill folder to publish")
     parser.add_argument("--skills-root", type=Path, help="Root containing local skill folders")
     parser.add_argument("--repo-dir", type=Path, required=True, help="Local publishing repository")
+    parser.add_argument("--manifest", type=Path, help="Publish allowlist manifest, defaults to <repo-dir>/publish-manifest.json")
     parser.add_argument("--all", action="store_true", help="Publish all local skills under --skills-root")
     args = parser.parse_args()
+
+    manifest_path = args.manifest or (args.repo_dir / "publish-manifest.json")
+    allowed_names: set[str] | None = None
 
     if args.all:
         if not args.skills_root:
             parser.error("--all requires --skills-root")
-        source_skills = iter_local_skills(args.skills_root)
+        allowed_names = load_publish_manifest(manifest_path)
+        source_skills = [
+            skill for skill in iter_local_skills(args.skills_root)
+            if skill.name in allowed_names
+        ]
     else:
         if not args.skill_dir:
             parser.error("provide --skill-dir or use --all with --skills-root")
         source_skills = [load_skill(args.skill_dir)]
+        if manifest_path.exists():
+            allowed_names = load_publish_manifest(manifest_path)
 
     if not source_skills:
         raise SystemExit("No skills found to publish")
@@ -246,6 +276,11 @@ def main() -> int:
         "total_indexed": len(published_skills),
         "generated": ["README.md", "index.json", "docs/"],
     }
+    if allowed_names is not None:
+        summary["manifest"] = str(manifest_path)
+        summary["not_in_manifest"] = [
+            skill.name for skill in source_skills if skill.name not in allowed_names
+        ]
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0
 

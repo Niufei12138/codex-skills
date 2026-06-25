@@ -11,8 +11,10 @@ Use this skill to publish local Codex skills from the user's Codex skills direct
 
 - Confirm whether the target repository should be public or private before creating it.
 - Inspect skill contents before publishing; do not publish secrets, tokens, private data, local machine paths, or user-specific credentials.
+- Publish only skills the user created or intentionally modified. Do not publish third-party skills installed from outside unless the user has forked, adapted, and explicitly approved sharing that adapted version.
 - Do not push automatically when the worktree contains unrelated changes.
 - Prefer a single skills monorepo unless the user requests one repo per skill.
+- For batch publishing, use `publish-manifest.json` as the allowlist. Do not run unrestricted `--all` over the entire local skills directory.
 - Keep generated docs concise and derived from the skill files.
 
 ## Recommended Repository Layout
@@ -21,6 +23,7 @@ Use this skill to publish local Codex skills from the user's Codex skills direct
 codex-skills/
   README.md
   index.json
+  publish-manifest.json
   docs/
     <skill-name>.md
   skills/
@@ -36,7 +39,8 @@ codex-skills/
 
 1. Resolve scope:
    - One skill: use the requested skill folder.
-   - All skills: publish all non-system local skills under the user's Codex skills directory.
+   - Multiple skills: use the skills listed in `publish-manifest.json`.
+   - All skills: publish only allowlisted skills from `publish-manifest.json`; never publish every local skill just because it exists under the user's Codex skills directory.
 
 2. Resolve target repository:
    - If a local repo path is provided, use it.
@@ -46,6 +50,7 @@ codex-skills/
 
 3. Validate source skill:
    - Run `quick_validate.py` on each skill before publishing.
+   - Confirm each selected skill is self-created or user-modified before copying it into the publishing repo.
    - Stop on validation failure and fix the skill first.
 
 4. Generate publish artifacts:
@@ -77,8 +82,27 @@ Prepare all local skills:
 python $env:USERPROFILE\.codex\skills\skill-github-publisher\scripts\prepare_skill_publish.py `
   --skills-root $env:USERPROFILE\.codex\skills `
   --repo-dir .\codex-skills `
+  --manifest .\codex-skills\publish-manifest.json `
   --all
 ```
+
+## Publish Manifest
+
+Use `publish-manifest.json` to record which skills are intentionally shareable:
+
+```json
+{
+  "skills": [
+    {
+      "name": "origin-publication-figure",
+      "status": "created-or-modified-by-user",
+      "reason": "Created locally and maintained as a shareable Origin figure workflow."
+    }
+  ]
+}
+```
+
+When a new self-created or user-modified skill should be shared, add it to this manifest before batch syncing. External skills remain local unless explicitly listed and approved.
 
 ## GitHub CLI Notes
 

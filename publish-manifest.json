@@ -1,0 +1,19 @@
+{
+  "skills": [
+    {
+      "name": "origin-publication-figure",
+      "status": "created-or-modified-by-user",
+      "reason": "Created locally and maintained as a shareable Origin publication figure workflow."
+    },
+    {
+      "name": "skill-evolution-review",
+      "status": "created-or-modified-by-user",
+      "reason": "Created locally to review and improve local Codex skills after real tasks."
+    },
+    {
+      "name": "skill-github-publisher",
+      "status": "created-or-modified-by-user",
+      "reason": "Created locally to publish and sync user-maintained Codex skills to GitHub."
+    }
+  ]
+}
