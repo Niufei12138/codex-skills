@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Evolution Review"
+  short_description: "Review task lessons and update skills safely."
+  default_prompt: "Use $skill-evolution-review to decide whether this task produced reusable lessons that should update a local Codex skill."

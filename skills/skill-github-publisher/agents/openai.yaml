@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill GitHub Publisher"
+  short_description: "Publish local Codex skills to GitHub."
+  default_prompt: "Use $skill-github-publisher to publish or sync a local Codex skill to a GitHub repository."

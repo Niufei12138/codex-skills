@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-06-25T07:47:06.477327+00:00",
+  "skills": [
+    {
+      "name": "origin-publication-figure",
+      "display_name": "Origin Publication Figure",
+      "short_description": "Create journal-ready Origin figures with QA.",
+      "description": "Create high-quality scientific and journal-ready figures in Origin/OriginPro using the local originlab MCP. Use when the user asks Codex to plot with Origin, make publication-quality or manuscript figures, polish scientific graphs, fit data for an Origin figure, export Origin figures, save .opju source files, or create reusable Origin figure outputs from CSV, Excel, pasted data, or existing Origin worksheets.",
+      "path": "skills/origin-publication-figure",
+      "docs": "docs/origin-publication-figure.md"
+    },
+    {
+      "name": "skill-evolution-review",
+      "display_name": "Skill Evolution Review",
+      "short_description": "Review task lessons and update skills safely.",
+      "description": "Review whether a completed or nearly completed task produced reusable lessons that should update a local Codex skill. Use after tasks that used a local skill, required repeated fixes, exposed tool quirks, revealed user preferences, produced QA failures, or prompted the user to ask for skill improvement, reflection, post-task optimization, or writing lessons back into SKILL.md.",
+      "path": "skills/skill-evolution-review",
+      "docs": "docs/skill-evolution-review.md"
+    },
+    {
+      "name": "skill-github-publisher",
+      "display_name": "Skill GitHub Publisher",
+      "short_description": "Publish local Codex skills to GitHub.",
+      "description": "Publish or sync local Codex skills to a GitHub repository. Use when the user asks to share a skill, publish a skill to GitHub, sync updated skills, create a skills repository, update README/index/docs for shared skills, or push local skill changes after creating or updating SKILL.md.",
+      "path": "skills/skill-github-publisher",
+      "docs": "docs/skill-github-publisher.md"
+    }
+  ]
+}

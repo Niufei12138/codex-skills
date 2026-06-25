@@ -1,0 +1,10 @@
+interface:
+  display_name: "Origin Publication Figure"
+  short_description: "Create journal-ready Origin figures with QA."
+  default_prompt: "Use $origin-publication-figure to create a journal-ready Origin figure, save the .opju source, and export high-quality image files."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "originlab"
+      description: "Local OriginLab MCP server for controlling Origin/OriginPro."
