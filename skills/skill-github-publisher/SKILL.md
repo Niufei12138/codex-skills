@@ -41,6 +41,7 @@ codex-skills/
 2. Resolve target repository:
    - If a local repo path is provided, use it.
    - Otherwise create or use a local publishing repo named `codex-skills` in the current workspace.
+   - Ensure GitHub CLI is installed and authenticated before creating or pushing a remote repository.
    - If the GitHub repo does not exist, use `gh repo create` after confirming name and visibility.
 
 3. Validate source skill:
@@ -82,6 +83,38 @@ python $env:USERPROFILE\.codex\skills\skill-github-publisher\scripts\prepare_ski
 ## GitHub CLI Notes
 
 - Check `gh --version` and `gh auth status` before creating repos or pushing.
+- If `gh` is missing on Windows, install it with:
+
+```powershell
+winget install --id GitHub.cli -e --accept-package-agreements --accept-source-agreements
+```
+
+- If the current terminal cannot find `gh` after installation, open a new terminal or use the full path:
+
+```powershell
+& "C:\Program Files\GitHub CLI\gh.exe" --version
+```
+
+- If `gh auth status` says the user is not logged in, use the quickest browser/device-code flow:
+
+```powershell
+gh auth login --hostname github.com --git-protocol https --web --clipboard --scopes repo
+```
+
+Then open `https://github.com/login/device`, paste the copied one-time code, and approve GitHub CLI. Recheck with:
+
+```powershell
+gh auth status
+```
+
+- If browser login fails because GitHub is unreachable or times out, use a personal access token instead:
+
+```powershell
+gh auth login --hostname github.com --git-protocol https --with-token
+```
+
+Paste a GitHub token with at least `repo` permission. Do not save or print the token in project files or chat logs.
+
 - For a new public repository:
 
 ```powershell
